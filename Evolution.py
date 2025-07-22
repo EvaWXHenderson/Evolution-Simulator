@@ -1,16 +1,16 @@
 import random as rand
-from matplotlib.animation import FuncAnimation
-import matplotlib.pyplot as plt
 import Map as map
 
-creature_points = ()
-water_source = ()
-food_source = ()
+creature_points = []
+water_source = []
+food_source = []
+food_eaten = 0
 
 class World:
       
       def __init__(self):
             self.creatures = []
+            self.day_number = 0
 
       def eat_(self):
             for creature in self.creatures:
@@ -55,6 +55,8 @@ class World:
                                           c1.death(world = self)
 
       def day(self):
+            self.day_number += 1
+
             self.fight()
             self.eat_()           
             self.drink_()
@@ -63,53 +65,77 @@ class World:
             self.move_()
             self.day_expenditure()
             self.death_()
-      
 
+            map.create_food_points(rand.randint(10,25)) #use if want random amount of food to grow each year independent of amount eaten
+            self.map_creatures()
 
+      def food_reset():
+            #use if want to reset the amount of food to always have the same amount of food in circulation as when game generated
+            global food_eaten
+
+            map.create_food_points(food_eaten)
+            food_eaten = 0
+
+      def map_creatures(self):
+            for creature in self.creatures:
+                  map.create_creature_points(Creature.position_x, Creature.position_y, 50)
 
 class Creature:
-    def __init__(self, world, energy = rand.randint(1,50), size = rand.randint(1,50), speed = rand.randint(1,50), strength = rand.randint(1,50), health = rand.randint(1,50), thirst = rand.randint(1,50), r_k = rand.randint(1, 50), birth_t = (1,50), baby_g = (1,50), growth_t = (1,50), growth_exp = (1,50)):
+    def __init__(self, world, energy = rand.randint(1,50), strength = rand.randint(1,50),thirst = rand.randint(1,50), r_k = rand.randint(1, 50), birth_t = (1,50), baby_exp = (1,50), growth_t = (1,50), growth_exp = (1,50)):
 
-        energy_ = energy
-        thirst_ = thirst
-        strength_ = strength
+        self.energy_ = energy
+        self.thirst_ = thirst
+        self.strength_ = strength
 
-        r_k_selection_ = r_k
+        self.r_k_selection_ = r_k
 
-        position_x = rand.randint(1,100)
-        position_y = rand.randint(1,100)
-        hori_move_ = rand.randint(1,5)
-        vert_move_ = rand.randint(1,5)
+        self.position_x = rand.randint(1,100)
+        self.position_y = rand.randint(1,100)
+        self.hori_move_ = rand.randint(1,5)
+        self.vert_move_ = rand.randint(1,5)
 
-        birth_threshold = birth_t
-        baby_gift = baby_g
+        self.birth_threshold = birth_t
+        self.baby_expenditure = baby_exp
 
-        growth_threshold = growth_t
-        growth_expenditure = growth_exp
+        self.growth_threshold = growth_t
+        self.growth_expenditure = growth_exp
 
         world.creatures.append(self)
 
     def grow(self):
-            if self.energy >= self.birth_threshold:
+            if self.energy_ >= self.birth_threshold:
                   x = rand.randint(1,50)
                   self.strength += x
-                  self.energy -= 2*x
+                  self.energy_ -= 2*x
 
     def birth(self):
-          if self.energy >= self.birth_threshold:
+          random = rand.randint(0, 10)
+          if self.energy_ >= self.birth_threshold:
 
             for x in range(self.r_k_selection):
-                  child_energy = self.baby_gift/x
-                  child_thirst = self.thirst
-                  child_size = self.size
-                  child_speed = self.speed
-                  child_strength = self.strength
-                  child_r_k_selection = self.r_k_selection
+                  child_r_k_selection = 0
+                  child_strength = 0
+                  inh_child_strength = self.strength/self.r_k_selection
 
-                  (Creature(child_energy, child_size, child_speed, child_strength, child_health, child_thirst))
+                  child_birth_t = 0
+                  child_baby_exp = 0
+                  child_growth_t = 0
+                  child_growth_exp = 0
+
+                  child_energy = self.baby_expenditure/self.r_k_selection
+                  child_thirst = self.thirst/self.r_k_selection
+                  
+                  child_strength = random_mutation(child_strength, inh_child_strength, 1, 0, 10, -2, 2)
+                  child_r_k_selection = random_mutation(child_r_k_selection, self.r_k_selection, 4, 0, 10, -2, 2)
+                  child_birth_t = random_mutation(child_birth_t, self.birth_t, 8, 0, 10, -2, 2)
+                  child_baby_exp = random_mutation(child_baby_exp, self.baby_exp, 3, 0, 10, -2, 2)
+                  child_growth_t = random_mutation(child_growth_t, self.growth_threshold, 7, 0, 10, -2, 2)
+                  child_growth_exp = random_mutation(child_growth_exp, self.growth_exp, 10, 0, 10, -2, 2)
+
+                  (Creature(child_energy, child_strength, child_thirst, child_r_k_selection, child_birth_t, child_baby_exp, child_growth_t, child_growth_exp))
 
     def check_death(self):
-          if self.energy <= 0:
+          if self.energy_ <= 0:
                 self.death()
           if self.thirst <= 0:
                 self.death()
@@ -139,27 +165,16 @@ class Creature:
       for point in water_source:
             if self.position_x == water_source[point][0] and self.position_y == water_source[point][1]:
                   self.thirst += 10
-                  water_source.remove(water_source[point])
-
-
+                  #water_source.remove(water_source[point])
 
 def create_creature(world, number = 50):
       for x in range(number):
             Creature(world)
 
-world_1 = World
-
-create_creature(world_1)
-
-map.create_food_points(50)
-map.create_water_points(75)
-map.create_water_points(75)
-map.create_creature_points(Creature.position_x, Creature.position_y, 50)
-
-map.create_map(51)
-
-"""while x < 100:
-      for creature in World.creatures:
-            World.day(creature)
-      
-      x += 1"""
+def random_mutation(inherited, parent, random_no, r_range_min, r_range_max, v_range_min, v_range_max):
+      random = rand.randint(r_range_min, r_range_max)
+      if random == random_no:
+            inherited = parent + rand.randint(v_range_min, v_range_max)
+      else:
+            inherited = parent
+      return(inherited)
