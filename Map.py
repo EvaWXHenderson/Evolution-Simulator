@@ -47,12 +47,15 @@ def Z_update(size_ = 51):
       Z = [[0 for x in range(size)] for x in range(size)]
       
       for x in range(len(water_source)):
+        print(water_source[x])
         Z[water_source[x][0]] [water_source[x][1]] = 1
 
       for x in range(len(food_source)):
+        print(food_source[x])
         Z[food_source[x][0]] [food_source[x][1]] = 2
 
       for x in range(len(creature_points)):
+        print(creature_points[x])
         Z[creature_points[x][0]] [creature_points[x][1]] = 3
 
       return Z
