@@ -1,10 +1,6 @@
 import random as rand
 import Map as map
 
-creature_points = []
-water_source = []
-food_source = []
-food_eaten = 0
 
 class World:
       
@@ -54,8 +50,22 @@ class World:
                                     elif score < 0:
                                           c1.death(world = self)
 
+      def food_reset():
+            #use if want to reset the amount of food to always have the same amount of food in circulation as when game generated
+            global food_eaten
+
+            map.create_food_points(food_eaten)
+            food_eaten = 0
+
+      def map_creatures(self):
+            for creature in self.creatures:
+                  map.create_creature_points()
+      
       def day(self):
             self.day_number += 1
+
+            map.creature_points = []
+            self.map_creatures()
 
             self.fight()
             self.eat_()           
@@ -67,21 +77,10 @@ class World:
             self.death_()
 
             map.create_food_points(rand.randint(10,25)) #use if want random amount of food to grow each year independent of amount eaten
-            self.map_creatures()
 
-      def food_reset():
-            #use if want to reset the amount of food to always have the same amount of food in circulation as when game generated
-            global food_eaten
-
-            map.create_food_points(food_eaten)
-            food_eaten = 0
-
-      def map_creatures(self):
-            for creature in self.creatures:
-                  map.create_creature_points(creature.position_x, creature.position_y, 50)
 
 class Creature:
-    def __init__(self, world, energy = rand.randint(1,50), strength = rand.randint(1,50),thirst = rand.randint(1,50), r_k = rand.randint(1, 50), birth_t = rand.randint(1,50), baby_exp = rand.randint(1,50), growth_t = rand.randint(1,50), growth_exp = rand.randint(1,25)):
+    def __init__(self, world, energy = 50, strength = rand.randint(1,50),thirst = rand.randint(1,50), r_k = rand.randint(1, 50), birth_t = rand.randint(1,50), baby_exp = rand.randint(1,50), growth_t = rand.randint(1,50), growth_exp = rand.randint(1,25)):
 
         self.energy_ = energy
         self.thirst_ = thirst
@@ -91,8 +90,8 @@ class Creature:
 
         self.position_x = rand.randint(1,50)
         self.position_y = rand.randint(1,50)
-        self.hori_move_ = rand.randint(1,5)
-        self.vert_move_ = rand.randint(1,5)
+        self.hori_move_ = rand.randint(1,3)
+        self.vert_move_ = rand.randint(1,3)
 
         self.birth_threshold = birth_t
         self.baby_expenditure = baby_exp
@@ -110,8 +109,9 @@ class Creature:
 
     def birth(self):          
           if self.energy_ >= self.birth_threshold:
+            self.energy_ -= self.baby_expenditure #loss of energy from parent
+
             for x in range(self.r_k_selection_):
-                  self.energy_ -= self.baby_expenditure #loss of energy from parent
          
                   child_energy = self.baby_expenditure/self.r_k_selection_
                   child_thirst = self.thirst_/self.r_k_selection_
@@ -132,12 +132,12 @@ class Creature:
                   child_growth_t = random_mutation(child_growth_t, self.growth_threshold, 7, 0, 10, -2, 2)
                   child_growth_exp = random_mutation(child_growth_exp, self.growth_expenditure, 10, 0, 10, -2, 2)
 
-                  (Creature(child_energy, child_strength, child_thirst, child_r_k_selection, child_birth_t, child_baby_exp, child_growth_t, child_growth_exp))
+                  (Creature(world = map.world, energy=child_energy, strength=child_strength, thirst=child_thirst, r_k=child_r_k_selection, birth_t=child_birth_t, baby_exp=child_baby_exp, growth_t=child_growth_t, growth_exp=child_growth_exp))
 
     def check_death(self):
           if self.energy_ <= 0:
                 self.death(map.world)
-          if self.thirst_ <= 0:
+          elif self.thirst_ <= 0:
                 self.death(map.world)
 
     def death(self, world):
@@ -153,7 +153,9 @@ class Creature:
                         self.energy_ -= 1
 
                   if self.position_x > 50:
-                       self.position_x -= 50 
+                       self.position_x -= 50
+                  if self.position_x < 0:
+                        self.position_x += 50
 
             for y in range(self.vert_move_):
                   move = rand.randint(-1,1) #produces back and forth movement
@@ -165,22 +167,22 @@ class Creature:
 
                   if self.position_y > 50:
                        self.position_y -= 50 
+                  if self.position_y < 0:
+                        self.position_y += 50
+            
+            print(self.position_x, self.position_y)
     
     def eat(self):
-      global food_source
-
-      for point in food_source:
-            if self.position_x == food_source[point][0] and self.position_y == food_source[point][1]:
+      for point in range(len(map.food_source)):
+            if self.position_x == map.food_source[point][0] and self.position_y == map.food_source[point][1]:
                   self.energy_ += 5
-                  food_source.remove(food_source[point])
+                  map.food_source.remove(map.food_source[point])
+                  break
    
     def drink(self):
-      global water_source
-
-      for point in water_source:
-            if self.position_x == water_source[point][0] and self.position_y == water_source[point][1]:
+      for point in range(len(map.water_source)):
+            if self.position_x == map.water_source[point][0] and self.position_y == map.water_source[point][1]:
                   self.thirst_ += 5
-                  #water_source.remove(water_source[point])
 
 def create_creature(world, number = 50):
       for x in range(number):

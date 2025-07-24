@@ -1,4 +1,5 @@
 import random as rand
+import Evolution as evo
 
 creature_points = []
 water_source = []
@@ -6,12 +7,12 @@ food_source = []
 world = None
 image = None
 
-def create_creature_points(x, y, creatures = 50):
+def create_creature_points():
       global creature_points
-
-      for x in range(creatures):
-            c_point = (x, y)
-            creature_points.append(c_point)
+    
+      for creature in world.creatures:
+            new_point = (creature.position_x, creature.position_y)
+            creature_points.append(new_point)
 
 def create_water_points(water_source, size = 25):
 
@@ -24,7 +25,7 @@ def create_water_points(water_source, size = 25):
         if new_point[0] > 0 and new_point[0] < 50 and new_point[1] > 0 and new_point[1] < 50:
             water_source.append(new_point)
 
-def create_food_points(items = 50):
+def create_food_points(items = 100):
     global food_source
 
     for x in range(items):
@@ -41,27 +42,25 @@ def create_base_map():
       create_water_points(water_source=water_source, size=25)
       create_water_points(water_source=water_source, size=75)
       create_water_points(water_source=water_source, size=200)
+      evo.World.map_creatures(world)
 
 def Z_update(size_ = 51):
       size = size_
       Z = [[0 for x in range(size)] for x in range(size)]
       
       for x in range(len(water_source)):
-        print(water_source[x])
         Z[water_source[x][0]] [water_source[x][1]] = 1
 
       for x in range(len(food_source)):
-        print(food_source[x])
         Z[food_source[x][0]] [food_source[x][1]] = 2
 
       for x in range(len(creature_points)):
-        print(creature_points[x])
         Z[creature_points[x][0]] [creature_points[x][1]] = 3
 
       return Z
 
 def update_map(frame):
-    print("!!",world)
+    print("number of creatures: " + str(len(world.creatures)))
     world.day()
     Z = Z_update()
     image.set_data(Z)
