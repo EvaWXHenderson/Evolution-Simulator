@@ -40,7 +40,7 @@ def create_food_points(items = 100):
 def create_base_map():
       create_food_points(50)
       create_water_points(water_source=water_source, size=25)
-      create_water_points(water_source=water_source, size=75)
+
       create_water_points(water_source=water_source, size=200)
       evo.World.map_creatures(world)
 
