@@ -5,6 +5,12 @@ Creatures must eat (from limited changing food sources) and drink (from water so
 
 Creatures most suited to their environment will be most likely to survive and grow in population.
 
+<p align="center">
+  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-25%20at%2011.48.03.jpeg" width="200" />
+  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-25%20at%2011.47.47.jpeg" width="200" /> 
+  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-25%20at%2011.57.39.png" width="200" /> 
+</p>
+
 ### Evolution.py
 Definition of classes: World and Creature
 - World: contains functions for events
