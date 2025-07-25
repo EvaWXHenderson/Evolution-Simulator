@@ -7,7 +7,7 @@ from matplotlib.colors import ListedColormap
 
 map.world = evo.World() #create instance of world
 
-evo.create_creature(world = map.world, number=1) #create 50 creatures
+evo.create_creature(world = map.world, number=10) #create 50 creatures
 
 map.create_base_map() #creates map size 51, 50 food tiles, 3 water sources
 
