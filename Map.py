@@ -38,13 +38,16 @@ def create_food_points(items = 100):
             food_source.append(f_point)
 
 def create_base_map():
-      create_food_points(50)
-      create_water_points(water_source=water_source, size=25)
-
+      create_water_points(water_source=water_source, size=75)
       create_water_points(water_source=water_source, size=200)
+      create_water_points(water_source=water_source, size=200)
+      create_water_points(water_source=water_source, size=50)
+      create_food_points(50)
       evo.World.map_creatures(world)
 
 def Z_update(size_ = 51):
+      global creature_points
+      
       size = size_
       Z = [[0 for x in range(size)] for x in range(size)]
       
@@ -55,7 +58,11 @@ def Z_update(size_ = 51):
         Z[food_source[x][0]] [food_source[x][1]] = 2
 
       for x in range(len(creature_points)):
-        Z[creature_points[x][0]] [creature_points[x][1]] = 3
+        try:
+          Z[creature_points[x][0]] [creature_points[x][1]] = 3
+        except:
+            print("x:",x)
+            print("c:",creature_points[x])
 
       return Z
 
