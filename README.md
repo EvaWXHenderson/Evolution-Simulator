@@ -62,3 +62,27 @@ with "mediumseagreen" associated with the base map colour, "powderblue" with the
 
 _(note: colours of base map (i.e. grass), water source tiles, food tiles, and creature tiles can be altered by altering the colours of cmap noted above)_
 _(note: the time between each frame may be altered by the interval argument of ani (in ms))_
+
+## Displaying Information
+At the end of every 'day' (iteration), the following information appears in the terminal:
+```
+Day: 1
+number of creatures: 51
+babies born: 1
+deaths: 0
+food eaten: 1
+```
+By clicking creature tiles during the running of the program, the following information will be displayed in the terminal:
+```
+Position: (20, 45)
+Horizontal bias: 1
+Vertical bias: 3
+Energy: -10
+Thirst: 19
+Strength: 38
+Growth threshold: 11
+Growth expenditure: 10
+Birth threshold: 22
+Birth expenditure: 13
+```
+The end_stats() function (optional) can be used after plt.show() in the/your simulation file if the information for all creatures that were present in the 'day' prior to termination of program.
