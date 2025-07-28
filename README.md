@@ -3,12 +3,12 @@ Small program designed to follow the change in 'creature' traits in response to 
 
 Creatures must eat and drink to maintain a level of energy and thirst. Creatures can develop/inherit preffered directions and distance of movement, strength, growth rates, energy given children upon birth, etc. This inheritance is subject to minor change on random due to 'random mutation'.
 
-Movement and population of creatures are tracked/displayed using matplotlib:
+Movement and population of creatures are tracked/displayed using matplotlib, a creature's information (e.g. position, size, energy, etc.) can be accessed by clicking on a given creature:
 
 <p align="center">
-  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-25%20at%2014.33.22.png" width="200" />
-  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-25%20at%2014.33.28.png" width="200" /> 
-  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-25%20at%2014.33.33.png" width="200" /> 
+  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-28%20at%2014.26.14.png" width="200" />
+  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-28%20at%2014.26.30.png" width="200" /> 
+  <img src="https://github.com/EvaWXHenderson/Evolution-Simulator/blob/main/images/Screenshot%202025-07-28%20at%2014.27.05.png" width="200" /> 
 </p>
 
 ## Files:
@@ -18,10 +18,10 @@ Definition of classes: World and Creature
 - Creature: contains variables defining creature traits and functions defining actions creatures may take
 
 ### Map.py:
-Functions for generation and updating of maps containing: food sources (red), water sources (blue), and creatures (brown).
+Functions for generation and updating of maps containing: food sources (red), water sources (blue), and creatures (white).
 
 ### Display.py:
-Contains counters and lists to hold information for the display of creature trait information during simulation.
+Contains counters, lists, and functions to hold information for the display of creature trait information during simulation.
 
 ### Simulation.py:
 Used to run simulation program using Map.py, Evolution.py, and Display.py.
@@ -38,6 +38,12 @@ Evolution.create_creature(world = 'instance of world class', number='number of i
 ```
 map.create_food_points(items = 'number of food tiles')
 ```
+**Rate of decay of food tiles**  - to alter the number of days that food items remain on the grid/are accessible by creatures:
+```
+map.food.decay(item, decay_rate='number of days until decay')
+```
+_(note: decay rate is default set to 10, this can be found in the World.day() function in Evolution.py)_
+
 **Number and size of water sources** - to alter the number and size of water sources that appear on the map use the map.create_water_points() function, creating an instance per water source desired:
 ```
 map.create_water_points(water_source = 'list that contains all water coordinates', size = 'number of water tiles')
