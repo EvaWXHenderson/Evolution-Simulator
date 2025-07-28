@@ -4,8 +4,21 @@ import Evolution as evo
 creature_points = []
 water_source = []
 food_source = []
+food_points = []
 world = None
 image = None
+
+class food:
+    def __init__(self):
+        self.age = 0
+        self.f_point = (rand.randint(0,50), rand.randint(0,50))
+
+    def ageing(self):
+        self.age += 1
+
+    def decay(self):
+        if self.age > 10:
+            food_source.remove(self)
 
 def create_creature_points():
       global creature_points
@@ -25,24 +38,31 @@ def create_water_points(water_source, size = 25):
         if new_point[0] > 0 and new_point[0] < 50 and new_point[1] > 0 and new_point[1] < 50:
             water_source.append(new_point)
 
-def create_food_points(items = 100):
-    global food_source
+def create_food(items = 50):
+    global food_source, water_source
 
     for x in range(items):
-        f_point = (rand.randint(0,50), rand.randint(0,50))
+        food_item = food()
 
         for point in water_source:
-            if f_point == point:
-                create_food_points(1)
+            if food_item.f_point == point:
+                create_food(1)
         else:
-            food_source.append(f_point)
+            food_source.append(food_item)
+
+def create_food_points():
+    global food_source, food_points
+    
+    for item in food_source:
+        food_points.append(item.f_point)
 
 def create_base_map():
       create_water_points(water_source=water_source, size=75)
       create_water_points(water_source=water_source, size=200)
       create_water_points(water_source=water_source, size=200)
       create_water_points(water_source=water_source, size=50)
-      create_food_points(50)
+      create_food(50)
+      create_food_points()
       evo.World.map_creatures(world)
 
 def Z_update(size_ = 51):
@@ -55,7 +75,7 @@ def Z_update(size_ = 51):
         Z[water_source[x][0]] [water_source[x][1]] = 1
 
       for x in range(len(food_source)):
-        Z[food_source[x][0]] [food_source[x][1]] = 2
+        Z[food_points[x][0]] [food_points[x][1]] = 2
 
       for x in range(len(creature_points)):
         try:
@@ -67,7 +87,6 @@ def Z_update(size_ = 51):
       return Z
 
 def update_map(frame):
-    print("number of creatures: " + str(len(world.creatures)))
     world.day()
     Z = Z_update()
     image.set_data(Z)

@@ -95,8 +95,16 @@ class World:
             self.day_expenditure()
             self.death_()
 
-            map.create_food_points(rand.randint(5,25)) #use if want random amount of food to grow each year independent of amount eaten
+            for item in map.food_source:
+                  map.food.ageing(item)
+                  map.food.decay(item)
+
+            map.create_food(rand.randint(5,25)) #use if want random amount of food to grow each year independent of amount eaten
             
+            map.food_points = []
+
+            map.create_food_points()
+
             for baby in self.new_borns:
                   map.world.creatures.append(baby)
 
@@ -244,7 +252,7 @@ class Creature:
       eat = False
 
       for point in range(len(map.food_source)):
-            if self.position_x == map.food_source[point][0] and self.position_y == map.food_source[point][1]:
+            if self.position_x == map.food_points[point][0] and self.position_y == map.food_points[point][1]:
                   self.energy_ += 15
                   map.food_source.remove(map.food_source[point])
 
