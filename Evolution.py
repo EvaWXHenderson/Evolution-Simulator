@@ -97,7 +97,7 @@ class World:
 
             for item in map.food_source:
                   map.food.ageing(item)
-                  map.food.decay(item)
+                  map.food.decay(item, decay_rate=10)
 
             map.create_food(rand.randint(5,25)) #use if want random amount of food to grow each year independent of amount eaten
             

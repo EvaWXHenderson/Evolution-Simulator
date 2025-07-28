@@ -24,7 +24,7 @@ map.image = ax.imshow(map.Z_update(), origin='lower',cmap=cmap)
 
 map.update_map(None)#runs a day without updadting display - good for error looking ;)
 
-ani = FuncAnimation(fig, map.update_map, frames = 100, interval = 5000, blit = True) #for animation of graph
+ani = FuncAnimation(fig, map.update_map, frames = 100, interval = 2000, blit = True) #for animation of graph
 plt.show()
 
 #dsp.end_stats()

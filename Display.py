@@ -39,9 +39,6 @@ def end_stats():
 
 def day_stats():
         global food_eaten, babies, deaths
-        
-        print(map.food_source)
-        print(map.food_points)
 
         print("Day: " + str(map.world.day_number))
         print("number of creatures: " + str(len(map.world.creatures)))

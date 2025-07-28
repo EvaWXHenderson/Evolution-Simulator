@@ -16,8 +16,8 @@ class food:
     def ageing(self):
         self.age += 1
 
-    def decay(self):
-        if self.age > 10:
+    def decay(self, decay_rate = 10):
+        if self.age > decay_rate:
             food_source.remove(self)
 
 def create_creature_points():
