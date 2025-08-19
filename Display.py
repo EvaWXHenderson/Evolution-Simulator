@@ -1,23 +1,6 @@
 import Evolution as evo
 import Map as map
 
-"""PLAN:
-No. creatures
-No. of babies had
-Pieces of food consumed
-
-averages of: strength
-            birth threshold + expenditure
-            growth threshold + expenditure
-            
-            horizontal movement
-            vertical movement"""
-
-"""be able to click on a creature:
-- print of stats in terminal
-- requires slow enough interval arg.
-"""
-
 food_eaten = 0
 babies = 0
 deaths = 0
